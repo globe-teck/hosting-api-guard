@@ -1,4 +1,4 @@
-"""Offline mock of a UAPI-style server with example data (example.com, fake tokens)."""
+"""Offline mock of a Module::function panel API server with example data (example.com, fake tokens)."""
 import json, posixpath, threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs
@@ -11,7 +11,7 @@ class MockPanel:
     def __init__(self):
         root = "/home/%s/public_html" % USER
         self.files = {root + "/index.html": "<h1>example.com</h1>\n",
-                      root + "/.htaccess": "RewriteEngine On\n",
+                      root + "/.htaccess": "# placeholder\n",
                       root + "/wp-config.php": "define('DB_PASSWORD','not-a-real-password');\n"}
         self.calls = []
 
@@ -20,7 +20,7 @@ class MockPanel:
         d, f = params.get("dir"), params.get("file")
         path = posixpath.join(d or "/home/%s/public_html" % USER, f or "")
         if func == "DomainInfo::list_domains":
-            return {"status": 1, "data": {"main_domain": "example.com", "addon_domains": ["example.org"]}}
+            return {"status": 1, "data": {"main_domain": "example.com", "addon_domains": ["example.net"]}}
         if func == "Fileman::list_files":
             return {"status": 1, "data": [{"file": posixpath.basename(p)} for p in self.files]}
         if func == "Fileman::get_file_content":
@@ -41,7 +41,7 @@ def serve(panel, host="127.0.0.1", port=0):
             pass
 
         def do_GET(self):
-            if self.headers.get("Authorization") != "cpanel %s:%s" % (USER, FAKE_TOKEN):
+            if self.headers.get("Authorization") != "panel %s:%s" % (USER, FAKE_TOKEN):
                 self.send_response(401); self.end_headers(); return
             u = urlparse(self.path)
             parts = u.path.strip("/").split("/")

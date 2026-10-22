@@ -2,7 +2,7 @@ import json, os, tempfile, unittest
 from hosting_api_guard import Guard, GuardConfig, Blocked, RateLimited, GuardError, redact
 from hosting_api_guard.guard import is_read
 from hosting_api_guard.mock import MockPanel, serve, FAKE_TOKEN, USER
-from hosting_api_guard.transport import uapi_transport
+from hosting_api_guard.transport import panel_transport
 from hosting_api_guard import cli
 
 ROOT = "/home/%s/public_html" % USER
@@ -130,7 +130,7 @@ class Redaction(unittest.TestCase):
     def test_token_kv(self):
         self.assertNotIn("abc123", redact("token=abc123 x"))
     def test_auth_header(self):
-        s = redact("Authorization: cpanel %s:%s" % (USER, FAKE_TOKEN), [USER])
+        s = redact("Authorization: panel %s:%s" % (USER, FAKE_TOKEN), [USER])
         self.assertNotIn(FAKE_TOKEN, s); self.assertNotIn(USER, s)
     def test_bare_token(self):
         self.assertNotIn(FAKE_TOKEN, redact("x %s y" % FAKE_TOKEN))
@@ -200,10 +200,10 @@ class Http(unittest.TestCase):
     def tearDownClass(cls):
         cls.srv.shutdown()
     def test_http_read(self):
-        g = Guard(uapi_transport(self.url, USER, "HAG_TEST_TOKEN"), GuardConfig(docroot=ROOT, usernames=[USER]))
+        g = Guard(panel_transport(self.url, USER, "HAG_TEST_TOKEN"), GuardConfig(docroot=ROOT, usernames=[USER]))
         self.assertEqual(g.call("DomainInfo::list_domains")["data"]["main_domain"], "example.com")
     def test_http_bad_token_redacted(self):
-        g = Guard(uapi_transport(self.url, USER, "HAG_NO_SUCH"), GuardConfig(docroot=ROOT, usernames=[USER]))
+        g = Guard(panel_transport(self.url, USER, "HAG_NO_SUCH"), GuardConfig(docroot=ROOT, usernames=[USER]))
         with self.assertRaises(GuardError) as cm: g.call("DomainInfo::list_domains")
         self.assertIn("401", str(cm.exception))
     def _cfg(self, d):

@@ -1,7 +1,7 @@
 [project]
 name = "hosting-api-guard"
 version = "0.1.0"
-description = "Least-privilege safety layer for AI agents calling cPanel-style hosting APIs: read-only by default, backup before write, redaction, audit log (stdlib Python)."
+description = "Least-privilege safety layer for AI agents calling hosting control-panel APIs: read-only by default, backup before write, redaction, audit log (stdlib Python)."
 requires-python = ">=3.8"
 license = {text = "MIT"}
 [project.scripts]

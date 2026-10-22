@@ -2,9 +2,9 @@
 import re
 
 _PATTERNS = [
-    (re.compile(r"(?i)(authorization\s*[:=]\s*)(cpanel|bearer|basic|whm)\s+[^\s\"',]+"), r"\1\2 [REDACTED]"),
+    (re.compile(r"(?i)(authorization\s*[:=]\s*)(panel|token|bearer|basic)\s+[^\s\"',]+"), r"\1\2 [REDACTED]"),
     (re.compile(r"(?i)\b(token|api_?key|password|passwd|secret|pass)\b(\s*[\"']?\s*(?:=|:(?!:))\s*[\"']?)[^\s\"'&,}]+"), r"\1\2[REDACTED]"),
-    (re.compile(r"\b[A-Z0-9]{32}\b"), "[REDACTED-TOKEN]"),  # UAPI-style 32-char tokens
+    (re.compile(r"\b[A-Z0-9]{32}\b"), "[REDACTED-TOKEN]"),  # 32-char API tokens
     (re.compile(r"(https?://)[^/\s:@]+:[^/\s@]+@"), r"\1[REDACTED]@"),
 ]
 

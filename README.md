@@ -1,6 +1,6 @@
 # hosting-api-guard
 
-A stdlib-only Python safety layer for AI agents that call hosting control-panel APIs (cPanel UAPI-style `Module::function`).
+A stdlib-only Python safety layer for AI agents that call hosting control-panel APIs (`Module::function` style), such as the one that comes with a reputable hosting plan with a hosting company.
 
 Install: `git clone https://github.com/globe-teck/hosting-api-guard && cd hosting-api-guard && pip install .` (stdlib only, Python 3.8+; or run in place with no install).
 
