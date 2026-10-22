@@ -1,0 +1,2 @@
+{"docroot": "/home/exampleuser/public_html", "rate_per_min": 30, "audit_path": "audit.jsonl",
+ "allow": ["*::list*", "*::get*", "Fileman::*"], "deny": ["Passwd::*", "Tokens::*", "UserManager::*"]}
